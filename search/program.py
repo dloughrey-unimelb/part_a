@@ -50,7 +50,7 @@ def search(
     # ... (your solution goes here!)
     # ...
 
-    return bfs_search(board)
+    return a_star_search(board)
 
     
 

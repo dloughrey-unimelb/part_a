@@ -15,11 +15,7 @@ def state_to_dict(state: BoardState) -> dict[Coord, CellState]:
     return dict(state)
 
 def heuristic(state: BoardState) -> int:
-    return sum(
-        cell.height
-        for _, cell in state
-        if cell.color == PlayerColor.BLUE
-    )
+    return sum(cell.height for coord, cell in state if cell.color == PlayerColor.BLUE)
 
 
 def search(

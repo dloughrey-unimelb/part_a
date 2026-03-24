@@ -2,6 +2,7 @@
 # Project Part A: Single Player Cascade
 
 import heapq
+from collections import deque
 from .core import CellState, Coord, Direction, Action, MoveAction, EatAction, CascadeAction, PlayerColor, BOARD_N
 from .utils import render_board
 
@@ -49,6 +50,14 @@ def search(
     # ... (your solution goes here!)
     # ...
 
+    return bfs_search(board)
+
+    
+
+def a_star_search(
+    board: dict[Coord, CellState]
+) -> list[Action] | None:
+    
     initial_state = board_dict_to_state(board)
 
     # Goal: no Blue tokens remain
@@ -90,13 +99,30 @@ def search(
             counter += 1
             heapq.heappush(open_set, (new_f, new_g, counter, next_state, new_actions))
 
-    return None 
+    return None
 
 
-    # Priority queue entries: (f, g, tie_breaker, state, actions)
-    # tie_breaker avoids comparing BoardState objects when f and g are equal
+def bfs_search(
+    board: dict[Coord, CellState]
+) -> list[Action] | None:
     
+    initial_state = board_dict_to_state(board)
+    queue = deque()
+    queue.append((initial_state, []))
 
+    while queue :
+        state, actions = queue.popleft()
+
+        if is_goal(state):
+            return actions
+
+        for action, new_state in get_neighbors(state):
+            queue.append((new_state, actions + [action]))
+    
+    return None
+
+def is_goal(state: BoardState) -> bool:
+    return not any(cell.color == PlayerColor.BLUE for coord, cell in state)
 
 def get_neighbors(state: BoardState) -> list[tuple[Action, BoardState]]:
     
